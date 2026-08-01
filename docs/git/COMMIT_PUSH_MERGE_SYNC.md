@@ -102,12 +102,16 @@ Assume the current branch is the working branch.
 An empty GitHub repository has no `origin/main` to update. For its first publication:
 
 1. Create and commit the intended initial state on a named working branch.
-2. Push the working branch.
-3. Create local `main` at that exact commit and push it as the remote default history.
-4. Return to the working branch and verify both local/remote pairs report `0 0`.
+2. Create local `main` at that exact commit and push `main` first so GitHub selects it
+   as the repository's default branch.
+3. Return to and push the working branch.
+4. Verify GitHub's default branch is `main` and both local/remote pairs report `0 0`.
 
 The first publication therefore has no divergent history to merge; the working branch
 and `main` intentionally start at the same commit.
+
+If the working branch was pushed first, GitHub may select it as the default. Change the
+repository's default-branch setting to `main` before declaring synchronization complete.
 
 ## Multi-repository rules
 
