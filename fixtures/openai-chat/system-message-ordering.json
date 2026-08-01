@@ -1,0 +1,35 @@
+{
+  "case": "rag_context_is_normalized_after_injection",
+  "public_model_alias": "product-consultant",
+  "upstream_model": "configured-upstream-model",
+  "injected_system_content": "Product profile and retrieved RAG context.",
+  "input_messages": [
+    {
+      "role": "system",
+      "content": "Use tool results as evidence."
+    },
+    {
+      "role": "system",
+      "content": "Follow the bounded project directive."
+    },
+    {
+      "role": "user",
+      "content": "Run the accepted handoff."
+    }
+  ],
+  "expected_forwarded_messages": [
+    {
+      "role": "system",
+      "content": "Product profile and retrieved RAG context.\n\nUse tool results as evidence.\n\nFollow the bounded project directive."
+    },
+    {
+      "role": "user",
+      "content": "Run the accepted handoff."
+    }
+  ],
+  "fields_that_must_be_preserved": [
+    "tools",
+    "tool_choice",
+    "stream"
+  ]
+}

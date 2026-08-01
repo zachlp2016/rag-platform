@@ -1,0 +1,12 @@
+[submodule "nexus-rag"]
+	path = nexus-rag
+	url = https://github.com/zachlp2016/nexus-rag.git
+	ignore = dirty
+[submodule "forge-rag"]
+	path = forge-rag
+	url = https://github.com/zachlp2016/forge-rag.git
+	ignore = dirty
+[submodule "parallax-rag"]
+	path = parallax-rag
+	url = https://github.com/zachlp2016/parallax-rag.git
+	ignore = dirty

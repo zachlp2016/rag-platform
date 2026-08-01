@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "id": "nexus",
+      "path": "nexus-rag",
+      "remote": "git@github.com:zachlp2016/nexus-rag.git",
+      "role": "Strategic cross-domain research",
+      "memory_scope": "General research preferences and Nexus-specific durable memories",
+      "test_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ]
+    },
+    {
+      "id": "forge",
+      "path": "forge-rag",
+      "remote": "git@github.com:zachlp2016/forge-rag.git",
+      "role": "Software engineering, security, and quality workflows",
+      "memory_scope": "Repository conventions, engineering preferences, and Forge-specific durable memories",
+      "test_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ]
+    },
+    {
+      "id": "parallax",
+      "path": "parallax-rag",
+      "remote": "git@github.com:zachlp2016/parallax-rag.git",
+      "role": "Markets, macroeconomics, and finance research",
+      "memory_scope": "Market watchlists, finance preferences, and Parallax-specific durable memories",
+      "test_command": null
+    }
+  ]
+}
