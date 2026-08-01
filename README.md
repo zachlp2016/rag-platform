@@ -51,6 +51,26 @@ python3 tools/check_semantic_routes.py
 python3 -m unittest discover -s tests -v
 ```
 
+## Semantic router
+
+The router exposes one authenticated OpenAI-compatible ingress on port `8000`.
+It resolves only trusted role/provider metadata, validates the public model alias,
+and streams the packet to a host-local logical service without inspecting prompts
+or product memory.
+
+```bash
+python3 -m venv .venv-router
+.venv-router/bin/pip install -r router/requirements.txt
+cp router/deployment.example.json router/deployment.local.json
+cp router/router.env.example ~/.config/rag-platform/router.env
+.venv-router/bin/python -m uvicorn router.asgi:app --host 127.0.0.1 --port 8000
+```
+
+Use the systemd template in
+[`deploy/systemd/rag-semantic-router.service`](deploy/systemd/rag-semantic-router.service)
+when Docker clients need the host gateway. The committed deployment file is an
+example only; the active service map and router secret remain host-local.
+
 The scheduled [`Default Branch Contract`](.github/workflows/default-branch-contract.yml)
 checks that GitHub still identifies `main` as the default branch. GitHub does not change
 the default during ordinary pushes; changing it requires an explicit repository-settings

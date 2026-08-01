@@ -1,0 +1,18 @@
+[Unit]
+Description=RAG semantic routing gateway on :8000
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Desktop/AI-Rag
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=%h/.config/rag-platform/router.env
+ExecStart=%h/Desktop/AI-Rag/.venv-router/bin/python -m uvicorn router.asgi:app --host 0.0.0.0 --port 8000 --workers 1 --no-access-log
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

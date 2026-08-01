@@ -3,7 +3,8 @@ import json
 from pathlib import Path
 import unittest
 
-from tools.semantic_routing_contract import (
+from rag_platform.semantic_routing import (
+    CompiledRouteTable,
     ManifestError,
     RouteResolutionError,
     normalize_identity,
@@ -25,6 +26,13 @@ class SemanticRoutingContractTest(unittest.TestCase):
 
     def test_manifest_is_valid(self):
         validate_manifest(self.manifest)
+
+    def test_compiled_route_table_exposes_version_and_services(self):
+        table = CompiledRouteTable(self.manifest)
+        self.assertEqual("rag.semantic-routing", table.contract)
+        self.assertEqual(1, table.schema_version)
+        self.assertEqual("2026-08-01.1", table.route_table_version)
+        self.assertEqual({"forge", "parallax", "local-model"}, table.service_ids)
 
     def test_all_conformance_cases(self):
         for case in self.fixtures["cases"]:

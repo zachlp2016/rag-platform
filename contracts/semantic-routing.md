@@ -12,7 +12,8 @@ credentials, process supervisors, or product memory.
 - `semantic-routing.schema.json` defines the route-table shape.
 - `semantic-routing.routes.json` is the initial version 1 route table.
 - `../fixtures/semantic-routing/cases.v1.json` defines conformance cases.
-- `../tools/check_semantic_routes.py` is a non-production reference checker.
+- `../rag_platform/semantic_routing.py` is the provider-neutral resolver.
+- `../tools/check_semantic_routes.py` validates the table and fixtures.
 
 ## Trusted route envelope
 

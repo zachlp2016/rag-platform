@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "services": {
+    "forge": {
+      "base_url": "http://127.0.0.1:9600"
+    },
+    "parallax": {
+      "base_url": "http://127.0.0.1:9000"
+    },
+    "local-model": {
+      "base_url": "http://127.0.0.1:8080"
+    }
+  }
+}

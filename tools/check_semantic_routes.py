@@ -9,7 +9,11 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from semantic_routing_contract import (
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from rag_platform.semantic_routing import (
     ManifestError,
     RouteResolutionError,
     resolve,
@@ -17,7 +21,6 @@ from semantic_routing_contract import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "contracts" / "semantic-routing.routes.json"
 DEFAULT_CASES = ROOT / "fixtures" / "semantic-routing" / "cases.v1.json"
 
