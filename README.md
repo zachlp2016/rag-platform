@@ -42,6 +42,11 @@ for the first decision record.
 Git publication follows [`docs/git/COMMIT_PUSH_MERGE_SYNC.md`](docs/git/COMMIT_PUSH_MERGE_SYNC.md),
 adapted from the TOF-AI-APP workflow.
 
+The scheduled [`Default Branch Contract`](.github/workflows/default-branch-contract.yml)
+checks that GitHub still identifies `main` as the default branch. GitHub does not change
+the default during ordinary pushes; changing it requires an explicit repository-settings
+action by an administrator.
+
 ## Manage the workspace
 
 The coordinator is intentionally read-only except when it runs a product's declared

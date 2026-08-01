@@ -1,0 +1,26 @@
+name: Default Branch Contract
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "23 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require main as the GitHub default branch
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if [ "$DEFAULT_BRANCH" != "main" ]; then
+            echo "Expected GitHub default branch 'main'; found '$DEFAULT_BRANCH'."
+            exit 1
+          fi
+          echo "GitHub default branch is main."

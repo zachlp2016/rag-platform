@@ -112,6 +112,8 @@ and `main` intentionally start at the same commit.
 
 If the working branch was pushed first, GitHub may select it as the default. Change the
 repository's default-branch setting to `main` before declaring synchronization complete.
+The repository's `Default Branch Contract` workflow checks this invariant on every push
+to `main` and once each day so a later administrative change becomes visible.
 
 ## Multi-repository rules
 
