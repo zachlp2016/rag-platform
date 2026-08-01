@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zachlp2016/rag-platform/contracts/semantic-routing.schema.json",
+  "title": "RAG Semantic Route Table",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schema_version",
+    "route_table_version",
+    "policy",
+    "routes"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "contract": {
+      "const": "rag.semantic-routing"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "route_table_version": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\.[1-9][0-9]*$"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unknown_identity",
+        "identity_conflict",
+        "model_mismatch"
+      ],
+      "properties": {
+        "unknown_identity": {
+          "const": "reject"
+        },
+        "identity_conflict": {
+          "const": "role_wins_with_diagnostic"
+        },
+        "model_mismatch": {
+          "const": "reject"
+        }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/route"
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uniqueNonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route_id",
+        "match",
+        "target"
+      ],
+      "properties": {
+        "route_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]*$"
+        },
+        "match": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role_keys": {
+              "$ref": "#/$defs/uniqueNonEmptyStrings"
+            },
+            "provider_names": {
+              "$ref": "#/$defs/uniqueNonEmptyStrings"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "role_keys"
+              ]
+            },
+            {
+              "required": [
+                "provider_names"
+              ]
+            }
+          ]
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "service_id",
+            "interface",
+            "retrieval",
+            "canonical_model",
+            "accepted_models"
+          ],
+          "properties": {
+            "service_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]*$"
+            },
+            "interface": {
+              "const": "openai_chat_completions"
+            },
+            "retrieval": {
+              "type": "boolean"
+            },
+            "canonical_model": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "accepted_models": {
+              "$ref": "#/$defs/uniqueNonEmptyStrings"
+            }
+          }
+        }
+      }
+    }
+  }
+}

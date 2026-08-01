@@ -1,0 +1,145 @@
+{
+  "route_table": "../../contracts/semantic-routing.routes.json",
+  "cases": [
+    {
+      "name": "reviewer role selects Forge",
+      "input": {
+        "role_key": "reviewer",
+        "provider_name": "Argus",
+        "model": "forge-consultant"
+      },
+      "expected": {
+        "status": "resolved",
+        "route_id": "forge-rag",
+        "service_id": "forge",
+        "retrieval": true,
+        "canonical_model": "forge-consultant",
+        "matched_by": "role",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "role identity normalization is stable",
+      "input": {
+        "role_key": "  ReViEwEr  ",
+        "provider_name": null,
+        "model": "forge-consultant"
+      },
+      "expected": {
+        "status": "resolved",
+        "route_id": "forge-rag",
+        "service_id": "forge",
+        "retrieval": true,
+        "canonical_model": "forge-consultant",
+        "matched_by": "role",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "recognized role wins over conflicting provider name",
+      "input": {
+        "role_key": "reviewer",
+        "provider_name": "Hephaestus",
+        "model": "forge-consultant"
+      },
+      "expected": {
+        "status": "resolved",
+        "route_id": "forge-rag",
+        "service_id": "forge",
+        "retrieval": true,
+        "canonical_model": "forge-consultant",
+        "matched_by": "role",
+        "diagnostics": [
+          "identity_conflict"
+        ]
+      }
+    },
+    {
+      "name": "generic builder role falls through to Hephaestus provider",
+      "input": {
+        "role_key": "builder",
+        "provider_name": "Hephaestus",
+        "model": "qwen3.6-27b"
+      },
+      "expected": {
+        "status": "resolved",
+        "route_id": "hephaestus-direct",
+        "service_id": "local-model",
+        "retrieval": false,
+        "canonical_model": "qwen3.6-27b",
+        "matched_by": "provider",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "Finance Consultant routes by provider when role is unset",
+      "input": {
+        "role_key": null,
+        "provider_name": "Finance Consultant",
+        "model": "finance-consultant"
+      },
+      "expected": {
+        "status": "resolved",
+        "route_id": "parallax-rag",
+        "service_id": "parallax",
+        "retrieval": true,
+        "canonical_model": "finance-consultant",
+        "matched_by": "provider",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "FinanceConsultant compact provider alias is accepted",
+      "input": {
+        "role_key": null,
+        "provider_name": "FinanceConsultant",
+        "model": "finance-consultant"
+      },
+      "expected": {
+        "status": "resolved",
+        "route_id": "parallax-rag",
+        "service_id": "parallax",
+        "retrieval": true,
+        "canonical_model": "finance-consultant",
+        "matched_by": "provider",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "model alias cannot replace missing identity",
+      "input": {
+        "role_key": null,
+        "provider_name": null,
+        "model": "finance-consultant"
+      },
+      "expected": {
+        "status": "rejected",
+        "error": "route_not_found"
+      }
+    },
+    {
+      "name": "unknown identity fails closed",
+      "input": {
+        "role_key": "unknown-role",
+        "provider_name": "Unknown Provider",
+        "model": "qwen3.6-27b"
+      },
+      "expected": {
+        "status": "rejected",
+        "error": "route_not_found"
+      }
+    },
+    {
+      "name": "selected route rejects a mismatched model",
+      "input": {
+        "role_key": "reviewer",
+        "provider_name": "Argus",
+        "model": "qwen3.6-27b"
+      },
+      "expected": {
+        "status": "rejected",
+        "error": "model_mismatch"
+      }
+    }
+  ]
+}

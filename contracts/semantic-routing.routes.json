@@ -1,0 +1,76 @@
+{
+  "$schema": "./semantic-routing.schema.json",
+  "contract": "rag.semantic-routing",
+  "schema_version": 1,
+  "route_table_version": "2026-08-01.1",
+  "policy": {
+    "unknown_identity": "reject",
+    "identity_conflict": "role_wins_with_diagnostic",
+    "model_mismatch": "reject"
+  },
+  "routes": [
+    {
+      "route_id": "forge-rag",
+      "match": {
+        "role_keys": [
+          "reviewer",
+          "argus"
+        ],
+        "provider_names": [
+          "Argus"
+        ]
+      },
+      "target": {
+        "service_id": "forge",
+        "interface": "openai_chat_completions",
+        "retrieval": true,
+        "canonical_model": "forge-consultant",
+        "accepted_models": [
+          "forge-consultant"
+        ]
+      }
+    },
+    {
+      "route_id": "hephaestus-direct",
+      "match": {
+        "role_keys": [
+          "hephaestus"
+        ],
+        "provider_names": [
+          "Hephaestus"
+        ]
+      },
+      "target": {
+        "service_id": "local-model",
+        "interface": "openai_chat_completions",
+        "retrieval": false,
+        "canonical_model": "qwen3.6-27b",
+        "accepted_models": [
+          "qwen3.6-27b"
+        ]
+      }
+    },
+    {
+      "route_id": "parallax-rag",
+      "match": {
+        "role_keys": [
+          "finance consultant",
+          "financeconsultant"
+        ],
+        "provider_names": [
+          "Finance Consultant",
+          "FinanceConsultant"
+        ]
+      },
+      "target": {
+        "service_id": "parallax",
+        "interface": "openai_chat_completions",
+        "retrieval": true,
+        "canonical_model": "finance-consultant",
+        "accepted_models": [
+          "finance-consultant"
+        ]
+      }
+    }
+  ]
+}

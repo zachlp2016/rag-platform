@@ -42,6 +42,15 @@ for the first decision record.
 Git publication follows [`docs/git/COMMIT_PUSH_MERGE_SYNC.md`](docs/git/COMMIT_PUSH_MERGE_SYNC.md),
 adapted from the TOF-AI-APP workflow.
 
+The versioned [`Semantic Routing Contract`](contracts/semantic-routing.md) defines
+role-first, provider-second selection of Forge, Parallax, and direct model services.
+Validate its route table and conformance fixtures with:
+
+```bash
+python3 tools/check_semantic_routes.py
+python3 -m unittest discover -s tests -v
+```
+
 The scheduled [`Default Branch Contract`](.github/workflows/default-branch-contract.yml)
 checks that GitHub still identifies `main` as the default branch. GitHub does not change
 the default during ordinary pushes; changing it requires an explicit repository-settings
