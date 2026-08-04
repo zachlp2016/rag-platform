@@ -1,0 +1,19 @@
+{
+  "fixture_contract": "rag.retrieval-decision.blind-analysis",
+  "schema_version": 1,
+  "oracle_version": "2026-08-03.1",
+  "frozen": true,
+  "description": "Randomized blind trial containing five strongly analytical and five weak or borderline prompts. Strong expects analysis; weak explicitly expects the ordinary interpretive standard tier rather than narrow-fact lookup. The strength key is evaluation metadata, not classifier input.",
+  "cases": [
+    {"id":"BL01","prompt":"What should I make of the recent move in semiconductors?","expected_strength":"weak","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"standard"}}},
+    {"id":"BL02","prompt":"Reconcile what bond markets are pricing for rate cuts with Fed guidance, recent inflation data, and the latest Beige Book.","expected_strength":"strong","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"analysis"}}},
+    {"id":"BL03","prompt":"Would you be comfortable owning JPM here?","expected_strength":"weak","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"standard"}}},
+    {"id":"BL04","prompt":"Put together a view on whether US consumer demand is actually weakening, using spending, delinquencies, labor data, and regional anecdotes.","expected_strength":"strong","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"analysis"}}},
+    {"id":"BL05","prompt":"Does the latest jobs data change the picture much?","expected_strength":"weak","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"standard"}}},
+    {"id":"BL06","prompt":"If oil stays above $100 for two quarters, which parts of our current market thesis break first, and why?","expected_strength":"strong","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"analysis"}}},
+    {"id":"BL07","prompt":"Are investors too optimistic about rate cuts?","expected_strength":"weak","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"standard"}}},
+    {"id":"BL08","prompt":"Trace how a sustained rise in long yields would flow through housing, small businesses, bank balance sheets, and equity valuations.","expected_strength":"strong","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"analysis"}}},
+    {"id":"BL09","prompt":"Is the soft-landing story still holding up?","expected_strength":"weak","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"standard"}}},
+    {"id":"BL10","prompt":"Decide whether regional banks look mispriced or correctly discounted by weighing deposit costs, credit quality, CRE exposure, and the economic backdrop.","expected_strength":"strong","expected":{"source":{"scope":"corpus","source_id":null},"depth":{"tier":"analysis"}}}
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zachlp2016/rag-platform/contracts/retrieval-decision.schema.json",
+  "title": "RAG Retrieval Decision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schema_version",
+    "request_id",
+    "product_id",
+    "source",
+    "depth",
+    "lifecycle"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "contract": {
+      "const": "rag.retrieval-decision"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "request_id": {
+      "$ref": "#/$defs/opaqueId"
+    },
+    "product_id": {
+      "$ref": "#/$defs/logicalId"
+    },
+    "source": {
+      "$ref": "#/$defs/sourceDecision"
+    },
+    "depth": {
+      "$ref": "#/$defs/depthDecision"
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/lifecycle"
+    }
+  },
+  "$defs": {
+    "logicalId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._:-]*$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "reasonCodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/logicalId"
+      }
+    },
+    "sourceDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "source_id",
+        "method",
+        "confidence",
+        "reason_codes"
+      ],
+      "properties": {
+        "scope": {
+          "enum": [
+            "corpus",
+            "file"
+          ]
+        },
+        "source_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/opaqueId"
+            }
+          ]
+        },
+        "method": {
+          "enum": [
+            "explicit",
+            "structural",
+            "conversation_state",
+            "fallback"
+          ]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/reasonCodes"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "corpus"
+              }
+            },
+            "required": [
+              "scope"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_id": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "file"
+              }
+            },
+            "required": [
+              "scope"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_id": {
+                "$ref": "#/$defs/opaqueId"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "depthDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tier",
+        "evidence_budget_tokens",
+        "facet_count",
+        "method",
+        "confidence",
+        "reason_codes"
+      ],
+      "properties": {
+        "tier": {
+          "enum": [
+            "lookup",
+            "standard",
+            "analysis",
+            "deep"
+          ]
+        },
+        "evidence_budget_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "facet_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "method": {
+          "enum": [
+            "explicit",
+            "structural",
+            "utility_model",
+            "fallback"
+          ]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/reasonCodes"
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "persist_decision",
+        "log_raw_query"
+      ],
+      "properties": {
+        "mode": {
+          "const": "ephemeral"
+        },
+        "persist_decision": {
+          "const": false
+        },
+        "log_raw_query": {
+          "const": false
+        }
+      }
+    }
+  }
+}

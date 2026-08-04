@@ -45,12 +45,20 @@ adapted from the TOF-AI-APP workflow.
 The versioned [`Semantic Routing Contract`](contracts/semantic-routing.md) defines
 role-first, provider-second selection of Forge, Parallax, and direct model services.
 
+The versioned [`Retrieval Decision Contract`](contracts/retrieval-decision.md)
+separates authorized source selection from retrieval depth. Its
+[`ADR 0004`](architecture/decisions/0004-retrieval-decision-contract.md),
+[`JSON Schema`](contracts/retrieval-decision.schema.json), and frozen
+[`evaluation fixtures`](fixtures/retrieval-decision/) let products test their own
+classifiers without creating an umbrella classifier or granting model outputs source,
+tool, or memory authority.
+
 The versioned [`Retrieval Request and Context Packet Contract`](contracts/context-packet.md)
 defines provider-neutral token accounting, evidence provenance, degradation reporting,
 and the untrusted-evidence boundary. Its staged product adoption plan is recorded in
 [`Context Packet Rollout`](docs/retrieval/CONTEXT_PACKET_ROLLOUT.md).
 
-Validate its route table and conformance fixtures with:
+Validate the umbrella route table and contract fixtures with:
 
 ```bash
 python3 tools/check_semantic_routes.py

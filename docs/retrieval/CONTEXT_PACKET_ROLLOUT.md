@@ -8,7 +8,9 @@ storage.
 
 ## Target request path
 
-1. Classify the requested retrieval mode and effective provider budget.
+1. Select the authorized corpus/file source independently from retrieval depth using
+   the [`Retrieval Decision Contract`](../../contracts/retrieval-decision.md), then
+   apply the product-owned budget for the selected depth tier.
 2. Plan one or more bounded search queries.
 3. Retrieve a candidate pool that is deliberately larger than the final packet.
 4. Fuse rankings, remove duplicates, and preserve useful source/time diversity.

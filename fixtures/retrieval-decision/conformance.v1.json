@@ -1,0 +1,340 @@
+{
+  "fixture_contract": "rag.retrieval-decision.conformance",
+  "schema_version": 1,
+  "base_decision": {
+    "contract": "rag.retrieval-decision",
+    "schema_version": 1,
+    "request_id": "request-conformance-001",
+    "product_id": "parallax",
+    "source": {
+      "scope": "corpus",
+      "source_id": null,
+      "method": "structural",
+      "confidence": 0.98,
+      "reason_codes": [
+        "multi_source_request"
+      ]
+    },
+    "depth": {
+      "tier": "analysis",
+      "evidence_budget_tokens": 24000,
+      "facet_count": 4,
+      "method": "utility_model",
+      "confidence": 0.91,
+      "reason_codes": [
+        "multi_facet_synthesis"
+      ]
+    },
+    "lifecycle": {
+      "mode": "ephemeral",
+      "persist_decision": false,
+      "log_raw_query": false
+    }
+  },
+  "valid_cases": [
+    {
+      "name": "corpus_analysis_with_model_depth_only",
+      "decision": {
+        "contract": "rag.retrieval-decision",
+        "schema_version": 1,
+        "request_id": "request-analysis-001",
+        "product_id": "parallax",
+        "source": {
+          "scope": "corpus",
+          "source_id": null,
+          "method": "structural",
+          "confidence": 0.98,
+          "reason_codes": [
+            "multi_source_request"
+          ]
+        },
+        "depth": {
+          "tier": "analysis",
+          "evidence_budget_tokens": 24000,
+          "facet_count": 4,
+          "method": "utility_model",
+          "confidence": 0.91,
+          "reason_codes": [
+            "multi_facet_synthesis"
+          ]
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_decision": false,
+          "log_raw_query": false
+        }
+      }
+    },
+    {
+      "name": "explicit_file_standard_depth",
+      "decision": {
+        "$schema": "../../contracts/retrieval-decision.schema.json",
+        "contract": "rag.retrieval-decision",
+        "schema_version": 1,
+        "request_id": "request-file-001",
+        "product_id": "forge",
+        "source": {
+          "scope": "file",
+          "source_id": "src/review/security_policy.md",
+          "method": "explicit",
+          "confidence": 1.0,
+          "reason_codes": [
+            "explicit_file"
+          ]
+        },
+        "depth": {
+          "tier": "standard",
+          "evidence_budget_tokens": 12000,
+          "facet_count": 1,
+          "method": "structural",
+          "confidence": 0.95,
+          "reason_codes": [
+            "bounded_file_question"
+          ]
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_decision": false,
+          "log_raw_query": false
+        }
+      }
+    },
+    {
+      "name": "active_file_deep_depth",
+      "decision": {
+        "contract": "rag.retrieval-decision",
+        "schema_version": 1,
+        "request_id": "request-file-002",
+        "product_id": "nexus",
+        "source": {
+          "scope": "file",
+          "source_id": "policy-handbook-2026.pdf",
+          "method": "conversation_state",
+          "confidence": 1.0,
+          "reason_codes": [
+            "active_document"
+          ]
+        },
+        "depth": {
+          "tier": "deep",
+          "evidence_budget_tokens": 36000,
+          "facet_count": 6,
+          "method": "explicit",
+          "confidence": 1.0,
+          "reason_codes": [
+            "exhaustive_request"
+          ]
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_decision": false,
+          "log_raw_query": false
+        }
+      }
+    },
+    {
+      "name": "explicit_fallback_is_observable",
+      "decision": {
+        "contract": "rag.retrieval-decision",
+        "schema_version": 1,
+        "request_id": "request-fallback-001",
+        "product_id": "parallax",
+        "source": {
+          "scope": "corpus",
+          "source_id": null,
+          "method": "fallback",
+          "confidence": 0.5,
+          "reason_codes": [
+            "product_default"
+          ]
+        },
+        "depth": {
+          "tier": "standard",
+          "evidence_budget_tokens": 12000,
+          "facet_count": 1,
+          "method": "fallback",
+          "confidence": 0.4,
+          "reason_codes": [
+            "classifier_unavailable",
+            "product_default"
+          ]
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_decision": false,
+          "log_raw_query": false
+        }
+      }
+    }
+  ],
+  "invalid_cases": [
+    {
+      "name": "utility_model_cannot_select_source",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "source",
+          "method"
+        ],
+        "value": "utility_model"
+      },
+      "expected_error": "source_authority_violation"
+    },
+    {
+      "name": "corpus_cannot_name_file",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "source",
+          "source_id"
+        ],
+        "value": "annual_report.pdf"
+      },
+      "expected_error": "invalid_source"
+    },
+    {
+      "name": "file_requires_source_id",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": [
+            "source",
+            "scope"
+          ],
+          "value": "file"
+        },
+        {
+          "operation": "replace",
+          "path": [
+            "source",
+            "source_id"
+          ],
+          "value": null
+        }
+      ],
+      "expected_error": "invalid_identifier"
+    },
+    {
+      "name": "raw_query_is_not_part_of_envelope",
+      "mutation": {
+        "operation": "add",
+        "path": [
+          "query"
+        ],
+        "value": "private user query"
+      },
+      "expected_error": "unknown_field"
+    },
+    {
+      "name": "decision_cannot_be_persisted",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "lifecycle",
+          "persist_decision"
+        ],
+        "value": true
+      },
+      "expected_error": "invalid_lifecycle"
+    },
+    {
+      "name": "raw_query_logging_cannot_be_enabled",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "lifecycle",
+          "log_raw_query"
+        ],
+        "value": true
+      },
+      "expected_error": "invalid_lifecycle"
+    },
+    {
+      "name": "budget_must_be_positive",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "depth",
+          "evidence_budget_tokens"
+        ],
+        "value": 0
+      },
+      "expected_error": "invalid_integer"
+    },
+    {
+      "name": "facet_count_must_include_primary",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "depth",
+          "facet_count"
+        ],
+        "value": 0
+      },
+      "expected_error": "invalid_integer"
+    },
+    {
+      "name": "unknown_depth_tier",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "depth",
+          "tier"
+        ],
+        "value": "file_focused"
+      },
+      "expected_error": "invalid_depth"
+    },
+    {
+      "name": "confidence_is_bounded",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "depth",
+          "confidence"
+        ],
+        "value": 1.01
+      },
+      "expected_error": "invalid_confidence"
+    },
+    {
+      "name": "reason_codes_are_unique",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "depth",
+          "reason_codes"
+        ],
+        "value": [
+          "multi_facet_synthesis",
+          "multi_facet_synthesis"
+        ]
+      },
+      "expected_error": "invalid_reason_codes"
+    },
+    {
+      "name": "reason_codes_cannot_be_empty",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "source",
+          "reason_codes"
+        ],
+        "value": []
+      },
+      "expected_error": "invalid_reason_codes"
+    },
+    {
+      "name": "depth_method_is_versioned",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "depth",
+          "method"
+        ],
+        "value": "classifier"
+      },
+      "expected_error": "invalid_depth"
+    }
+  ]
+}
