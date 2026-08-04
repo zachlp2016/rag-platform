@@ -39,6 +39,7 @@ does not delete or migrate runtime evidence.
 - Forge: `3a8df47` (`feat: quarantine low-trust ecosystem intake`), following
   `0a07a58` (`refactor: assign developer intel to Forge`)
 - Parallax: `e1d8201` (`test: measure real entry evidence compression`),
+  followed by `262aea7` (`Make retained intel fail open and rank by recency`),
   following `1d29894` (`refactor: narrow Parallax intel sources`)
 
 ## Verification findings
@@ -124,3 +125,28 @@ exact title prefix from a description when the title remains in the packet.
 Generative entry compression must meet the same real-data, per-item audit, and
 fail-open requirements as a suppressive gate. Small aggregate savings do not
 justify added calls or omitted qualifiers.
+
+## Retained-source admission and recency
+
+Parallax revision `262aea7` makes source ownership—not a broad finance
+classifier—the general-intel RAG admission boundary. NewsAPI, Google Trends,
+Twitter/X, and configured RSS fail open into general retrieval. Finance
+relevance remains auditable and continues to govern narrower product-specific
+destinations such as market memory. A failed utility call cannot block retained
+evidence. Sources assigned to Forge remain ineligible in Parallax even when
+historical chunks still exist locally.
+
+Every new intel observation has an effective timestamp: publication time when
+available, otherwise collection time. Raw archives stay append-only. Products
+may replace the active revision of one logical item while retaining its prior
+raw observations for provenance.
+
+Across different articles, recency is a ranking feature rather than a deletion
+rule. Parallax applies a bounded `0.01` bonus with a seven-day half-life after
+semantic fusion and same-item revision collapse. A newer article can break a
+near tie but cannot displace substantially better semantic evidence. Context
+packet manifests expose the configured weight, half-life, and per-item bonus.
+
+This is currently a Parallax adoption, not yet a shared implementation library.
+Other products may adopt the contract in separate commits after testing their
+own source classes with captured real data.
