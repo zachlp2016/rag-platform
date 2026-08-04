@@ -60,3 +60,9 @@ It classified 9/10 correctly with zero false negatives, but the numeric value
 tracked answer polarity/materiality more than confidence in correctness: correct
 negative answers received scores as low as 1. Numeric self-confidence is not an
 adopted contract; a separately named materiality-likelihood score may be tested.
+
+Parallax revision `9acdc5f` tested that score-only contract on 50 balanced cases.
+With 8–10 pass, 3–7 review, and 1–2 reject, it retained all 25 material cases,
+rejected 24/25 irrelevant cases, produced no irrelevant automatic passes, and
+achieved ROC AUC 0.9856. Only 6/50 advanced automatically while 20 remained in
+review, so review-backlog policy and repeated stability tests block promotion.
