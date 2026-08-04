@@ -38,7 +38,8 @@ does not delete or migrate runtime evidence.
 
 - Forge: `3a8df47` (`feat: quarantine low-trust ecosystem intake`), following
   `0a07a58` (`refactor: assign developer intel to Forge`)
-- Parallax: `1d29894` (`refactor: narrow Parallax intel sources`)
+- Parallax: `12d73cb` (`test: audit materiality scoring on unseen rss`),
+  following `1d29894` (`refactor: narrow Parallax intel sources`)
 
 ## Verification findings
 
@@ -66,3 +67,35 @@ With 8–10 pass, 3–7 review, and 1–2 reject, it retained all 25 material ca
 rejected 24/25 irrelevant cases, produced no irrelevant automatic passes, and
 achieved ROC AUC 0.9856. Only 6/50 advanced automatically while 20 remained in
 review, so review-backlog policy and repeated stability tests block promotion.
+
+Parallax revision `1099c34` reran the same 50 cases after interpreting 5–10 as
+pass, 3–4 as review, and 1–2 as reject. It reproduced the original scores and
+retained all material fixtures, but this demonstrated consistency only on the
+threshold-development set.
+
+Parallax revision `12d73cb` then froze 150 previously unused retained-RSS
+records from Financial Times and ZeroHedge. Eight-item batching required 19
+local 2B calls and yielded 125 pass, 19 review, and 6 reject. Independent audit
+found five of the six rejections material, including Big Tech credit risk,
+cross-country unemployment, and Apple's $5tn valuation. Automatic rejection
+would have reduced downstream work by only 4%. Single-item rechecks changed 16
+of 25 non-pass decisions and recovered several obvious errors, but still
+rejected material evidence.
+
+## Cross-product gate consequence
+
+A utility-model score may rank, annotate, or queue evidence, but it must not
+delete, suppress, or mark source evidence terminal unless a source-specific,
+time-separated unseen test has zero unsafe rejections. The original raw archive
+remains authoritative regardless of the derived decision.
+
+Batch size is part of the tested inference contract. A score calibrated on
+single items cannot authorize batched rejection, and a batched result cannot be
+assumed stable when replayed alone. Products should separately test each source
+class because a gate that provides useful reduction on a noisy social feed may
+provide negligible benefit on a curated finance feed.
+
+For curated or high-base-rate sources, prefer non-destructive utility labels
+such as evidence type, observed versus forecast, opinion or promotion,
+reliability cues, and candidate axes. Hard source admission for noisier streams
+requires its own fail-open harness and promotion gate.
