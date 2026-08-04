@@ -48,3 +48,9 @@ the current Google Trends adapter returned HTTP 404. Of 30 RSS observations,
 16 were new revisions relative to the local-day archive. The local 2B quality
 worker made 16 single-item calls but produced unsafe geopolitical/policy
 rejections, so its results were retained as test evidence and not promoted.
+
+Parallax revision `8cfea00` then isolated a two-field global-finance
+materiality call from quality typing and lane routing. On a balanced ten-case
+gold set it scored 8/10 with 5/5 material cases retained, zero false negatives,
+and a 30% reduction in automatic stage-two work. This is a promising TDD result,
+not production authorization; broader blind and stability tests remain required.
