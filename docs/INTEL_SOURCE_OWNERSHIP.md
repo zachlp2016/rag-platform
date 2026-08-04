@@ -84,6 +84,10 @@ rejected material evidence.
 
 ## Cross-product gate consequence
 
+All future corpora used to evaluate this behavior follow the shared
+[real-data-only testing policy](testing/REAL_DATA_ONLY.md). Earlier constructed
+fixtures are historical only and cannot authorize promotion.
+
 A utility-model score may rank, annotate, or queue evidence, but it must not
 delete, suppress, or mark source evidence terminal unless a source-specific,
 time-separated unseen test has zero unsafe rejections. The original raw archive

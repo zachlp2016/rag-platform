@@ -1,5 +1,17 @@
 # AI RAG Platform Memory
 
+## Real-data-only testing — applies to every harness
+
+All new tests of domain understanding, classification, routing, retrieval,
+summarization, memory admission, or model quality must use captured real
+product-owned data under `docs/testing/REAL_DATA_ONLY.md`. Never create
+synthetic, paraphrased, blended, templated, or model-generated domain fixtures.
+Existing constructed harnesses are frozen historical artifacts and cannot
+authorize promotion.
+
+Deterministic mocks remain allowed only for non-domain transport and
+state-machine faults. They cannot establish model or domain accuracy.
+
 ## Scope
 
 This root repository is the provider-neutral architecture and coordination layer for
