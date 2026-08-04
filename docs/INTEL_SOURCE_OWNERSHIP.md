@@ -38,7 +38,7 @@ does not delete or migrate runtime evidence.
 
 - Forge: `3a8df47` (`feat: quarantine low-trust ecosystem intake`), following
   `0a07a58` (`refactor: assign developer intel to Forge`)
-- Parallax: `12d73cb` (`test: audit materiality scoring on unseen rss`),
+- Parallax: `e1d8201` (`test: measure real entry evidence compression`),
   following `1d29894` (`refactor: narrow Parallax intel sources`)
 
 ## Verification findings
@@ -82,6 +82,20 @@ would have reduced downstream work by only 4%. Single-item rechecks changed 16
 of 25 non-pass decisions and recovered several obvious errors, but still
 rejected material evidence.
 
+Parallax revision `e1d8201` tested non-destructive entry compression on a
+second non-overlapping 150-record real RSS corpus. Exact repeated-title removal
+reduced bounded characters by 15.71% with no model call. The 2B exact-span
+worker required 19 multi-minute calls, failed extraction validation on 120/150
+records, and reduced only another 1.52% after fallback. Audit found material
+omissions in 4 of the 13 outputs that actually reduced size. It is not a
+promotion candidate.
+
+The same test found that canonical URL is not a safe deduplication key: 498 RSS
+observations contained 498 distinct identity-plus-content revisions even
+though they occupied 462 canonical URLs. Thirty-two identities had changed
+content. Only exact repeated content may be collapsed; later content at an
+existing URL remains new evidence.
+
 ## Cross-product gate consequence
 
 All future corpora used to evaluate this behavior follow the shared
@@ -103,3 +117,10 @@ For curated or high-base-rate sources, prefer non-destructive utility labels
 such as evidence type, observed versus forecast, opinion or promotion,
 reliability cues, and candidate axes. Hard source admission for noisier streams
 requires its own fail-open harness and promotion gate.
+
+Token reduction should first use deterministic structure that is provably
+redundant while preserving the original field separately, such as removing an
+exact title prefix from a description when the title remains in the packet.
+Generative entry compression must meet the same real-data, per-item audit, and
+fail-open requirements as a suppressive gate. Small aggregate savings do not
+justify added calls or omitted qualifiers.
