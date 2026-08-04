@@ -7,7 +7,8 @@ completions endpoint.
 
 Before forwarding a request upstream:
 
-1. Inject product RAG/persona context only for that product's model alias.
+1. Inject product instructions and rendered product evidence only for that product's
+   model alias.
 2. Normalize the final message list after all injections are complete.
 3. Consolidate all system instructions into one leading `system` message when the
    upstream model requires a single initial system block.
@@ -19,6 +20,14 @@ Before forwarding a request upstream:
 
 The ordering fixture in `fixtures/openai-chat/system-message-ordering.json` captures
 the regression that motivated this contract.
+
+## Retrieved evidence boundary
+
+When a product adopts `rag.context-packet` version 1, its provider adapter must keep
+packet evidence outside system/developer instructions. Retrieved text is explicitly
+untrusted as instruction authority, must be clearly delimited as evidence, and cannot
+authorize tools or override system, developer, user, or product policy. Product
+persona and trusted instructions remain separate from the Context Packet.
 
 ## Error behavior
 

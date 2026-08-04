@@ -1,0 +1,537 @@
+{
+  "contract": "rag.context-packet.conformance",
+  "schema_version": 1,
+  "valid_exchanges": [
+    {
+      "name": "complete_decomposed_analysis",
+      "request": {
+        "contract": "rag.retrieval-request",
+        "schema_version": 1,
+        "product_id": "parallax",
+        "request_id": "request-analysis-001",
+        "created_at": "2026-08-03T21:00:00-04:00",
+        "query": {
+          "text": "Analyze AI infrastructure demand and financing conditions.",
+          "intent": "analysis",
+          "as_of": "2026-08-03T21:00:00-04:00",
+          "conversation": [
+            {
+              "role": "user",
+              "content": "Focus on evidence available as of today."
+            }
+          ]
+        },
+        "scopes": [
+          "public_intel",
+          "structured_market"
+        ],
+        "budget": {
+          "context_window_tokens": 32768,
+          "reserved_output_tokens": 4096,
+          "reserved_reasoning_tokens": 512,
+          "safety_margin_tokens": 1024,
+          "instruction_tokens": 1200,
+          "conversation_tokens": 800,
+          "tool_tokens": 400,
+          "requested_evidence_tokens": 20000,
+          "max_evidence_items": 40
+        },
+        "token_accounting": {
+          "method": "conservative_estimate",
+          "counter_id": "utf8_chars_div_2.5:v1"
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_packet": false,
+          "log_evidence_content": false
+        }
+      },
+      "packet": {
+        "contract": "rag.context-packet",
+        "schema_version": 1,
+        "product_id": "parallax",
+        "packet_id": "packet-analysis-001",
+        "request_id": "request-analysis-001",
+        "generated_at": "2026-08-03T21:00:02-04:00",
+        "token_accounting": {
+          "method": "conservative_estimate",
+          "counter_id": "utf8_chars_div_2.5:v1"
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_packet": false,
+          "log_evidence_content": false
+        },
+        "plan": {
+          "strategy": "decomposed",
+          "queries": [
+            {
+              "query_id": "q-primary",
+              "text": "Analyze AI infrastructure demand and financing conditions.",
+              "purpose": "primary",
+              "round": 1,
+              "lane_ids": [
+                "public_intel",
+                "structured_market"
+              ]
+            },
+            {
+              "query_id": "q-demand",
+              "text": "AI infrastructure demand indicators",
+              "purpose": "demand_signals",
+              "round": 1,
+              "lane_ids": [
+                "public_intel"
+              ]
+            },
+            {
+              "query_id": "q-financing",
+              "text": "financing conditions for AI infrastructure",
+              "purpose": "financing_conditions",
+              "round": 1,
+              "lane_ids": [
+                "structured_market"
+              ]
+            }
+          ]
+        },
+        "effective_context": {
+          "context_window_tokens": 32768,
+          "reserved_output_tokens": 4096,
+          "reserved_reasoning_tokens": 512,
+          "safety_margin_tokens": 1024,
+          "max_input_tokens": 27136,
+          "non_evidence_input_tokens": 2400,
+          "requested_evidence_tokens": 20000,
+          "available_evidence_tokens": 20000,
+          "selected_evidence_tokens": 600,
+          "max_evidence_items": 40,
+          "selected_evidence_items": 2
+        },
+        "evidence": [
+          {
+            "evidence_id": "ev-ai-demand-20260803-0001",
+            "citation_id": "E001",
+            "query_ids": [
+              "q-primary",
+              "q-demand"
+            ],
+            "lane_id": "public_intel",
+            "rank": 1,
+            "text": "Demand evidence selected for the conformance fixture.",
+            "token_count": 320,
+            "trust": "untrusted",
+            "source": {
+              "kind": "public_intel",
+              "source_id": "source-demand-001",
+              "title": "Demand source",
+              "uri": "https://example.test/demand"
+            },
+            "provenance": {
+              "document_id": "document-demand-001",
+              "chunk_id": "chunk-demand-001",
+              "chunk_ordinal": 0,
+              "content_hash": "sha256:1d1bb09b3f934f3a5b08539cfda54d020ef19b2d5506f7d2b309c23862c34b66",
+              "ingested_at": "2026-08-03T20:40:00-04:00",
+              "published_at": "2026-08-03T19:00:00-04:00",
+              "valid_from": "2026-08-03T19:00:00-04:00",
+              "valid_to": null,
+              "source_revision": "revision-demand-001"
+            },
+            "scores": {
+              "final": 0.94,
+              "components": {
+                "dense": 0.88,
+                "rerank": 0.97
+              }
+            }
+          },
+          {
+            "evidence_id": "ev-financing-20260803-0001",
+            "citation_id": "E002",
+            "query_ids": [
+              "q-primary",
+              "q-financing"
+            ],
+            "lane_id": "structured_market",
+            "rank": 2,
+            "text": "Financing evidence selected for the conformance fixture.",
+            "token_count": 280,
+            "trust": "untrusted",
+            "source": {
+              "kind": "structured_fact",
+              "source_id": "source-financing-001",
+              "title": "Financing source"
+            },
+            "provenance": {
+              "document_id": "document-financing-001",
+              "chunk_id": "chunk-financing-001",
+              "chunk_ordinal": 0,
+              "content_hash": "sha256:edf11dbcdca26926855dfe52d1f8c735e3dd98bdcb8808fcef684a7347876f5d",
+              "ingested_at": "2026-08-03T20:45:00-04:00",
+              "published_at": "2026-08-03T18:00:00-04:00",
+              "valid_from": "2026-08-03T18:00:00-04:00",
+              "valid_to": null,
+              "source_revision": "revision-financing-001"
+            },
+            "scores": {
+              "final": 0.91,
+              "components": {
+                "exact": 1.0,
+                "freshness": 0.95
+              }
+            }
+          }
+        ],
+        "diagnostics": {
+          "status": "complete",
+          "degradation_codes": [],
+          "coverage_gaps": [],
+          "candidate_count": 60,
+          "post_deduplication_candidate_count": 45,
+          "selected_count": 2,
+          "dropped_for_budget_count": 5,
+          "lanes": [
+            {
+              "lane_id": "public_intel",
+              "required": true,
+              "status": "complete",
+              "candidate_count": 40,
+              "selected_count": 1,
+              "diagnostic_codes": []
+            },
+            {
+              "lane_id": "structured_market",
+              "required": true,
+              "status": "complete",
+              "candidate_count": 20,
+              "selected_count": 1,
+              "diagnostic_codes": []
+            }
+          ]
+        }
+      },
+      "expected_effective_context": {
+        "context_window_tokens": 32768,
+        "reserved_output_tokens": 4096,
+        "reserved_reasoning_tokens": 512,
+        "safety_margin_tokens": 1024,
+        "max_input_tokens": 27136,
+        "non_evidence_input_tokens": 2400,
+        "requested_evidence_tokens": 20000,
+        "available_evidence_tokens": 20000,
+        "selected_evidence_tokens": 600,
+        "max_evidence_items": 40,
+        "selected_evidence_items": 2
+      }
+    },
+    {
+      "name": "degraded_legacy_provenance",
+      "request": {
+        "contract": "rag.retrieval-request",
+        "schema_version": 1,
+        "product_id": "forge",
+        "request_id": "request-legacy-001",
+        "created_at": "2026-08-03T22:00:00Z",
+        "query": {
+          "text": "Review the indexed repository guidance.",
+          "intent": "file_focused",
+          "as_of": "2026-08-03T22:00:00Z",
+          "conversation": []
+        },
+        "scopes": [
+          "repository_documents"
+        ],
+        "budget": {
+          "context_window_tokens": 16384,
+          "reserved_output_tokens": 2048,
+          "reserved_reasoning_tokens": 512,
+          "safety_margin_tokens": 512,
+          "instruction_tokens": 900,
+          "conversation_tokens": 300,
+          "tool_tokens": 0,
+          "requested_evidence_tokens": 8000,
+          "max_evidence_items": 20
+        },
+        "token_accounting": {
+          "method": "provider_tokenizer",
+          "counter_id": "local-tokenizer:v2"
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_packet": false,
+          "log_evidence_content": false
+        }
+      },
+      "packet": {
+        "contract": "rag.context-packet",
+        "schema_version": 1,
+        "product_id": "forge",
+        "packet_id": "packet-legacy-001",
+        "request_id": "request-legacy-001",
+        "generated_at": "2026-08-03T22:00:01Z",
+        "token_accounting": {
+          "method": "provider_tokenizer",
+          "counter_id": "local-tokenizer:v2"
+        },
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_packet": false,
+          "log_evidence_content": false
+        },
+        "plan": {
+          "strategy": "single_query",
+          "queries": [
+            {
+              "query_id": "q-primary",
+              "text": "Review the indexed repository guidance.",
+              "purpose": "primary",
+              "round": 1,
+              "lane_ids": [
+                "repository_documents"
+              ]
+            }
+          ]
+        },
+        "effective_context": {
+          "context_window_tokens": 16384,
+          "reserved_output_tokens": 2048,
+          "reserved_reasoning_tokens": 512,
+          "safety_margin_tokens": 512,
+          "max_input_tokens": 13312,
+          "non_evidence_input_tokens": 1200,
+          "requested_evidence_tokens": 8000,
+          "available_evidence_tokens": 8000,
+          "selected_evidence_tokens": 250,
+          "max_evidence_items": 20,
+          "selected_evidence_items": 1
+        },
+        "evidence": [
+          {
+            "evidence_id": "ev-legacy-repository-001",
+            "citation_id": "E001",
+            "query_ids": [
+              "q-primary"
+            ],
+            "lane_id": "repository_documents",
+            "rank": 1,
+            "text": "Legacy evidence with an honestly unknown ingestion timestamp.",
+            "token_count": 250,
+            "trust": "untrusted",
+            "source": {
+              "kind": "repository_document",
+              "source_id": "legacy-repository-source"
+            },
+            "provenance": {
+              "document_id": "legacy-document-001",
+              "chunk_id": "legacy-chunk-001",
+              "chunk_ordinal": 0,
+              "content_hash": "sha256:9298dde60f073b047d519c36acc56df7cf2c89c1c6f8dea9386811158e81b867",
+              "ingested_at": null,
+              "published_at": null,
+              "valid_from": null,
+              "valid_to": null,
+              "source_revision": null
+            },
+            "scores": {
+              "final": 0.8,
+              "components": {
+                "dense": 0.8
+              }
+            }
+          }
+        ],
+        "diagnostics": {
+          "status": "degraded",
+          "degradation_codes": [
+            "provenance_unknown"
+          ],
+          "coverage_gaps": [
+            "ingestion_time_unknown"
+          ],
+          "candidate_count": 10,
+          "post_deduplication_candidate_count": 9,
+          "selected_count": 1,
+          "dropped_for_budget_count": 0,
+          "lanes": [
+            {
+              "lane_id": "repository_documents",
+              "required": true,
+              "status": "complete",
+              "candidate_count": 10,
+              "selected_count": 1,
+              "diagnostic_codes": [
+                "provenance_unknown"
+              ]
+            }
+          ]
+        }
+      },
+      "expected_effective_context": {
+        "context_window_tokens": 16384,
+        "reserved_output_tokens": 2048,
+        "reserved_reasoning_tokens": 512,
+        "safety_margin_tokens": 512,
+        "max_input_tokens": 13312,
+        "non_evidence_input_tokens": 1200,
+        "requested_evidence_tokens": 8000,
+        "available_evidence_tokens": 8000,
+        "selected_evidence_tokens": 250,
+        "max_evidence_items": 20,
+        "selected_evidence_items": 1
+      }
+    }
+  ],
+  "invalid_mutations": [
+    {
+      "name": "reject_persistent_request",
+      "base": "complete_decomposed_analysis",
+      "target": "request",
+      "validation": "request",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/lifecycle/persist_packet",
+          "value": true
+        }
+      ],
+      "expected_error": "persistence_not_ephemeral"
+    },
+    {
+      "name": "reject_instruction_authority_in_evidence",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "packet",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/evidence/0/trust",
+          "value": "trusted"
+        }
+      ],
+      "expected_error": "invalid_trust_boundary"
+    },
+    {
+      "name": "reject_non_padded_citation",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "packet",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/evidence/0/citation_id",
+          "value": "E1"
+        }
+      ],
+      "expected_error": "invalid_evidence"
+    },
+    {
+      "name": "reject_evidence_over_effective_budget",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "packet",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/evidence/0/token_count",
+          "value": 19721
+        },
+        {
+          "op": "replace",
+          "path": "/effective_context/selected_evidence_tokens",
+          "value": 20001
+        }
+      ],
+      "expected_error": "budget_exceeded"
+    },
+    {
+      "name": "reject_cross_product_packet",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "exchange",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/product_id",
+          "value": "forge"
+        }
+      ],
+      "expected_error": "request_packet_mismatch"
+    },
+    {
+      "name": "reject_token_counter_drift",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "exchange",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/token_accounting/counter_id",
+          "value": "different-estimator:v1"
+        }
+      ],
+      "expected_error": "request_packet_mismatch"
+    },
+    {
+      "name": "reject_unreported_unknown_provenance",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "packet",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/evidence/0/provenance/ingested_at",
+          "value": null
+        }
+      ],
+      "expected_error": "invalid_diagnostics"
+    },
+    {
+      "name": "reject_exhausted_fixed_budget",
+      "base": "complete_decomposed_analysis",
+      "target": "request",
+      "validation": "request",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/budget/context_window_tokens",
+          "value": 5000
+        }
+      ],
+      "expected_error": "invalid_budget"
+    },
+    {
+      "name": "reject_survivor_count_above_candidates",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "packet",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/diagnostics/post_deduplication_candidate_count",
+          "value": 61
+        }
+      ],
+      "expected_error": "invalid_diagnostics"
+    },
+    {
+      "name": "reject_duplicate_content_hash",
+      "base": "complete_decomposed_analysis",
+      "target": "packet",
+      "validation": "packet",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/evidence/1/text",
+          "value": "Demand evidence selected for the conformance fixture."
+        },
+        {
+          "op": "replace",
+          "path": "/evidence/1/provenance/content_hash",
+          "value": "sha256:1d1bb09b3f934f3a5b08539cfda54d020ef19b2d5506f7d2b309c23862c34b66"
+        }
+      ],
+      "expected_error": "duplicate_evidence"
+    }
+  ]
+}

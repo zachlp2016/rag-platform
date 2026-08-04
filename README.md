@@ -44,6 +44,12 @@ adapted from the TOF-AI-APP workflow.
 
 The versioned [`Semantic Routing Contract`](contracts/semantic-routing.md) defines
 role-first, provider-second selection of Forge, Parallax, and direct model services.
+
+The versioned [`Retrieval Request and Context Packet Contract`](contracts/context-packet.md)
+defines provider-neutral token accounting, evidence provenance, degradation reporting,
+and the untrusted-evidence boundary. Its staged product adoption plan is recorded in
+[`Context Packet Rollout`](docs/retrieval/CONTEXT_PACKET_ROLLOUT.md).
+
 Validate its route table and conformance fixtures with:
 
 ```bash

@@ -1,0 +1,764 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zachlp2016/rag-platform/contracts/retrieval-context.schema.json",
+  "title": "RAG Retrieval Request and Context Packet v1",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/retrievalRequest"
+    },
+    {
+      "$ref": "#/$defs/contextPacket"
+    }
+  ],
+  "$defs": {
+    "logicalId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._:-]{0,127}$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "persist_packet",
+        "log_evidence_content"
+      ],
+      "properties": {
+        "mode": {
+          "const": "ephemeral"
+        },
+        "persist_packet": {
+          "const": false
+        },
+        "log_evidence_content": {
+          "const": false
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context_window_tokens",
+        "reserved_output_tokens",
+        "reserved_reasoning_tokens",
+        "safety_margin_tokens",
+        "instruction_tokens",
+        "conversation_tokens",
+        "tool_tokens",
+        "requested_evidence_tokens",
+        "max_evidence_items"
+      ],
+      "properties": {
+        "context_window_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reserved_output_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reserved_reasoning_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "safety_margin_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "instruction_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conversation_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tool_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "requested_evidence_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_evidence_items": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "tokenAccounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "counter_id"
+      ],
+      "properties": {
+        "method": {
+          "enum": [
+            "provider_tokenizer",
+            "conservative_estimate"
+          ]
+        },
+        "counter_id": {
+          "$ref": "#/$defs/opaqueId"
+        }
+      }
+    },
+    "conversationTurn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "content"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "user",
+            "assistant"
+          ]
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "requestQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "intent",
+        "as_of",
+        "conversation"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "intent": {
+          "enum": [
+            "lookup",
+            "synthesis",
+            "analysis",
+            "deep_research",
+            "file_focused"
+          ]
+        },
+        "as_of": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "conversation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/conversationTurn"
+          }
+        }
+      }
+    },
+    "retrievalRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "schema_version",
+        "product_id",
+        "request_id",
+        "created_at",
+        "query",
+        "scopes",
+        "budget",
+        "token_accounting",
+        "lifecycle"
+      ],
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "contract": {
+          "const": "rag.retrieval-request"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "product_id": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "request_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "created_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "query": {
+          "$ref": "#/$defs/requestQuery"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        },
+        "budget": {
+          "$ref": "#/$defs/budget"
+        },
+        "token_accounting": {
+          "$ref": "#/$defs/tokenAccounting"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle"
+        }
+      }
+    },
+    "plannedQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "text",
+        "purpose",
+        "round",
+        "lane_ids"
+      ],
+      "properties": {
+        "query_id": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "purpose": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "round": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "lane_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "queries"
+      ],
+      "properties": {
+        "strategy": {
+          "enum": [
+            "single_query",
+            "decomposed",
+            "iterative"
+          ]
+        },
+        "queries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/plannedQuery"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_id"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "source_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "nullableTimestamp": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_id",
+        "chunk_id",
+        "chunk_ordinal",
+        "content_hash",
+        "ingested_at",
+        "published_at",
+        "valid_from",
+        "valid_to",
+        "source_revision"
+      ],
+      "properties": {
+        "document_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "chunk_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "chunk_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "ingested_at": {
+          "$ref": "#/$defs/nullableTimestamp"
+        },
+        "published_at": {
+          "$ref": "#/$defs/nullableTimestamp"
+        },
+        "valid_from": {
+          "$ref": "#/$defs/nullableTimestamp"
+        },
+        "valid_to": {
+          "$ref": "#/$defs/nullableTimestamp"
+        },
+        "source_revision": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/opaqueId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "final",
+        "components"
+      ],
+      "properties": {
+        "final": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "components": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/logicalId"
+          },
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "citation_id",
+        "query_ids",
+        "lane_id",
+        "rank",
+        "text",
+        "token_count",
+        "trust",
+        "source",
+        "provenance",
+        "scores"
+      ],
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "citation_id": {
+          "type": "string",
+          "pattern": "^E(?=[0-9]{3,}$)0*[1-9][0-9]*$"
+        },
+        "query_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        },
+        "lane_id": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "token_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "trust": {
+          "const": "untrusted"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "scores": {
+          "$ref": "#/$defs/scores"
+        }
+      }
+    },
+    "effectiveContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context_window_tokens",
+        "reserved_output_tokens",
+        "reserved_reasoning_tokens",
+        "safety_margin_tokens",
+        "max_input_tokens",
+        "non_evidence_input_tokens",
+        "requested_evidence_tokens",
+        "available_evidence_tokens",
+        "selected_evidence_tokens",
+        "max_evidence_items",
+        "selected_evidence_items"
+      ],
+      "properties": {
+        "context_window_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reserved_output_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reserved_reasoning_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "safety_margin_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_input_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "non_evidence_input_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "requested_evidence_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "available_evidence_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "selected_evidence_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_evidence_items": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "selected_evidence_items": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "laneDiagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "empty",
+                  "failed",
+                  "skipped"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_count": {
+                "const": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "candidate_count": {
+                "const": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "failed"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostic_codes": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "lane_id",
+        "required",
+        "status",
+        "candidate_count",
+        "selected_count",
+        "diagnostic_codes"
+      ],
+      "properties": {
+        "lane_id": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "empty",
+            "failed",
+            "skipped"
+          ]
+        },
+        "candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selected_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "diagnostic_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "degradation_codes",
+        "coverage_gaps",
+        "candidate_count",
+        "post_deduplication_candidate_count",
+        "selected_count",
+        "dropped_for_budget_count",
+        "lanes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "complete",
+            "degraded",
+            "empty"
+          ]
+        },
+        "degradation_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        },
+        "coverage_gaps": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        },
+        "candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "post_deduplication_candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selected_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dropped_for_budget_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lanes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/laneDiagnostic"
+          }
+        }
+      }
+    },
+    "contextPacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "schema_version",
+        "product_id",
+        "packet_id",
+        "request_id",
+        "generated_at",
+        "token_accounting",
+        "lifecycle",
+        "plan",
+        "effective_context",
+        "evidence",
+        "diagnostics"
+      ],
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "contract": {
+          "const": "rag.context-packet"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "product_id": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "packet_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "request_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "generated_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "token_accounting": {
+          "$ref": "#/$defs/tokenAccounting"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle"
+        },
+        "plan": {
+          "$ref": "#/$defs/plan"
+        },
+        "effective_context": {
+          "$ref": "#/$defs/effectiveContext"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "diagnostics": {
+          "$ref": "#/$defs/diagnostics"
+        }
+      }
+    }
+  }
+}
