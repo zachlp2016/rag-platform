@@ -54,3 +54,9 @@ materiality call from quality typing and lane routing. On a balanced ten-case
 gold set it scored 8/10 with 5/5 material cases retained, zero false negatives,
 and a 30% reduction in automatic stage-two work. This is a promising TDD result,
 not production authorization; broader blind and stability tests remain required.
+
+Parallax revision `84ed310` tested 1–10 self-confidence in an isolated harness.
+It classified 9/10 correctly with zero false negatives, but the numeric value
+tracked answer polarity/materiality more than confidence in correctness: correct
+negative answers received scores as low as 1. Numeric self-confidence is not an
+adopted contract; a separately named materiality-likelihood score may be tested.
