@@ -13,10 +13,13 @@ storage.
    apply the product-owned budget for the selected depth tier.
 2. Plan one or more bounded search queries.
 3. Retrieve a candidate pool that is deliberately larger than the final packet.
-4. Fuse rankings, remove duplicates, and preserve useful source/time diversity.
-5. Pack the best evidence to a token budget rather than a fixed chunk count.
-6. Render stable evidence labels and provenance as untrusted data.
-7. Synthesize once, cite evidence labels, and return a redacted packet summary.
+4. For structured lanes, bind every candidate to an exact vintage and evaluate
+   `available_at <= as_of` using the
+   [`Point-in-Time Structured Evidence Contract`](../../contracts/structured-evidence.md).
+5. Fuse rankings, remove duplicates, and preserve useful source/time diversity.
+6. Pack the best evidence to a token budget rather than a fixed chunk count.
+7. Render stable evidence labels and provenance as untrusted data.
+8. Synthesize once, cite evidence labels, and return a redacted packet summary.
 
 The packet is an ephemeral request artifact. It is not written into user memory,
 product memory, or another product's collection unless a separate, explicit memory
@@ -29,6 +32,7 @@ operation is requested and authorized.
 | Provider capacity | Effective-window discovery, reserves, accounting fields | Provider/model choice and local defaults |
 | Planning | Query and lane interfaces, bounded-query invariants | Domain decomposition and intent rules |
 | Evidence | Stable IDs, provenance, trust labels, content hashes | Source eligibility and point-in-time rules |
+| Structured evidence | Availability vocabulary, vintage identity, no-lookahead equation | Raw rows, release calendars, units, features, freshness thresholds |
 | Ranking | Fusion/dedup/diversity interfaces | Weights, freshness, authority, and domain boosts |
 | Packing | Deterministic token admission and degradation events | Lane quotas and evidence-budget profile |
 | Rendering | Retrieved content never becomes system policy | Persona and answer format |
@@ -42,6 +46,8 @@ shared product prompt, or implicit cross-product memory lookup.
 ### Parallax
 
 - Structured market and macro facts
+- FRED and other macro series as the initial point-in-time structured-evidence pilot;
+  raw observations and revision history remain Parallax-owned
 - Current versus historical research
 - The single active/latest Beige Book, with prior releases archive-only by default
 - News, filings, local documents, and explicitly relevant user memory
@@ -70,17 +76,21 @@ match its repository-workflow role; document-only loading is not sufficient.
    umbrella repository.
 2. Pilot adaptive requested retrieval in Parallax while preserving its current
    `answer` and `sources` API fields.
-3. Add stable chunk IDs, source kinds, ordinals, hashes, and honest timestamp fields
+3. Adopt point-in-time structured evidence for the Parallax macro lane: repair current
+   unit/window/as-of defects, retain exact vintages locally, and admit only records
+   whose `available_at` is on or before the request `as_of`.
+4. Add stable chunk IDs, source kinds, ordinals, hashes, and honest timestamp fields
    during product ingestion. Legacy records with unknown freshness stay marked
    unknown rather than receiving invented dates.
-4. Add packet-level evaluation for recall, citation support, stale leakage, duplicate
+5. Add packet-level evaluation for recall, citation support, stale leakage, future
+   vintage leakage, duplicate
    rate, source diversity, prompt-injection resistance, latency, and token use.
-5. Adopt the contract independently in Nexus, then Forge, with product-specific
+6. Adopt the contracts independently in Nexus, then Forge, with product-specific
    lanes and commits.
-6. Add Parallax's main library to finance chat only through an explicit `search`,
+7. Add Parallax's main library to finance chat only through an explicit `search`,
    `use indexed knowledge`, request flag, or tool invocation. Requested RAG remains
    requested; it is not injected into every finance prompt.
-7. Consider extracting a shared packet assembler only after at least two products
+8. Consider extracting a shared packet assembler only after at least two products
    have conforming implementations and the v1 behavior has stabilized.
 
 ## Initial budget profiles
@@ -110,4 +120,8 @@ A product is conforming only when tests demonstrate that:
 - retrieved text is rendered as untrusted evidence, never as system instructions;
 - citations resolve to packet evidence and no raw evidence is emitted to telemetry;
 - product storage and memory remain isolated;
+- every structured value is tied to source/series and vintage/revision identity, and
+  no record with `available_at > as_of` can enter model context;
+- raw structured rows remain product-owned and only compact summaries enter the
+  ephemeral packet;
 - old API response fields remain compatible during the migration window.

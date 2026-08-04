@@ -1,0 +1,394 @@
+{
+  "fixture_contract": "rag.structured-evidence.conformance",
+  "schema_version": 1,
+  "base_evidence": {
+    "contract": "rag.structured-evidence",
+    "schema_version": 1,
+    "product_id": "example_product",
+    "request_id": "request-structured-001",
+    "lane_id": "structured_macro",
+    "evidence_id": "price-index:2026-07:v2026-08-03",
+    "as_of": "2026-08-04T16:00:00Z",
+    "source": {
+      "kind": "official_statistics",
+      "source_id": "public-statistics-service",
+      "series_id": "price-index-all-items",
+      "uri": "https://example.test/series/price-index-all-items"
+    },
+    "observation": {
+      "observed_at": "2026-07-01T00:00:00Z",
+      "released_at": "2026-08-03T12:00:00Z",
+      "available_at": "2026-08-03T12:05:00Z",
+      "vintage": {
+        "vintage_id": "2026-08-03",
+        "revision_id": null
+      },
+      "unit": "index_2020_100",
+      "frequency": "monthly",
+      "value": 104.7,
+      "features": [
+        {
+          "feature_id": "year_over_year_change",
+          "value": 2.7,
+          "unit": "percent"
+        }
+      ]
+    },
+    "freshness": {
+      "status": "fresh",
+      "basis": "available_at",
+      "max_age_seconds": 172800
+    },
+    "provenance": {
+      "retrieved_at": "2026-08-03T12:06:00Z",
+      "availability_basis": "source_release",
+      "payload_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "eligibility": {
+      "no_lookahead": true,
+      "reason_codes": []
+    },
+    "trust": "untrusted",
+    "lifecycle": {
+      "mode": "ephemeral",
+      "persist_evidence": false,
+      "log_values": false
+    }
+  },
+  "valid_cases": [
+    {
+      "name": "released_series_with_derived_feature_is_eligible",
+      "evidence": {
+        "$schema": "../../contracts/structured-evidence.schema.json",
+        "contract": "rag.structured-evidence",
+        "schema_version": 1,
+        "product_id": "example_product",
+        "request_id": "request-structured-001",
+        "lane_id": "structured_macro",
+        "evidence_id": "price-index:2026-07:v2026-08-03",
+        "as_of": "2026-08-04T16:00:00Z",
+        "source": {
+          "kind": "official_statistics",
+          "source_id": "public-statistics-service",
+          "series_id": "price-index-all-items",
+          "uri": "https://example.test/series/price-index-all-items"
+        },
+        "observation": {
+          "observed_at": "2026-07-01T00:00:00Z",
+          "released_at": "2026-08-03T12:00:00Z",
+          "available_at": "2026-08-03T12:05:00Z",
+          "vintage": {
+            "vintage_id": "2026-08-03",
+            "revision_id": null
+          },
+          "unit": "index_2020_100",
+          "frequency": "monthly",
+          "value": 104.7,
+          "features": [
+            {
+              "feature_id": "year_over_year_change",
+              "value": 2.7,
+              "unit": "percent"
+            }
+          ]
+        },
+        "freshness": {
+          "status": "fresh",
+          "basis": "available_at",
+          "max_age_seconds": 172800
+        },
+        "provenance": {
+          "retrieved_at": "2026-08-03T12:06:00Z",
+          "availability_basis": "source_release",
+          "payload_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "eligibility": {
+          "no_lookahead": true,
+          "reason_codes": []
+        },
+        "trust": "untrusted",
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_evidence": false,
+          "log_values": false
+        }
+      }
+    },
+    {
+      "name": "historical_revision_can_be_stale_and_eligible",
+      "evidence": {
+        "contract": "rag.structured-evidence",
+        "schema_version": 1,
+        "product_id": "example_product",
+        "request_id": "request-history-001",
+        "lane_id": "structured_history",
+        "evidence_id": "activity-index:2025-q4:v2",
+        "as_of": "2026-08-04T16:00:00Z",
+        "source": {
+          "kind": "official_statistics",
+          "source_id": "public-statistics-service",
+          "series_id": "activity-index",
+          "uri": null
+        },
+        "observation": {
+          "observed_at": "2025-12-31T23:59:59Z",
+          "released_at": null,
+          "available_at": "2026-01-20T14:00:00Z",
+          "vintage": {
+            "vintage_id": "2026-01-20-snapshot",
+            "revision_id": "revision-2"
+          },
+          "unit": "index",
+          "frequency": "quarterly",
+          "value": 100.2,
+          "features": []
+        },
+        "freshness": {
+          "status": "stale",
+          "basis": "observed_at",
+          "max_age_seconds": 7776000
+        },
+        "provenance": {
+          "retrieved_at": "2026-08-04T15:59:00Z",
+          "availability_basis": "source_vintage",
+          "payload_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "eligibility": {
+          "no_lookahead": true,
+          "reason_codes": []
+        },
+        "trust": "untrusted",
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_evidence": false,
+          "log_values": false
+        }
+      }
+    },
+    {
+      "name": "later_vintage_is_explicitly_ineligible_for_earlier_as_of",
+      "evidence": {
+        "contract": "rag.structured-evidence",
+        "schema_version": 1,
+        "product_id": "example_product",
+        "request_id": "request-replay-001",
+        "lane_id": "structured_rates",
+        "evidence_id": "policy-rate:2026-07:v2026-08-05",
+        "as_of": "2026-08-04T16:00:00Z",
+        "source": {
+          "kind": "official_statistics",
+          "source_id": "public-statistics-service",
+          "series_id": "policy-rate",
+          "uri": "https://example.test/series/policy-rate"
+        },
+        "observation": {
+          "observed_at": "2026-07-31T23:59:59Z",
+          "released_at": "2026-08-05T12:00:00Z",
+          "available_at": "2026-08-05T12:05:00Z",
+          "vintage": {
+            "vintage_id": "2026-08-05",
+            "revision_id": "revision-3"
+          },
+          "unit": "percent",
+          "frequency": "monthly",
+          "value": 4.25,
+          "features": []
+        },
+        "freshness": {
+          "status": "unknown",
+          "basis": "available_at",
+          "max_age_seconds": null
+        },
+        "provenance": {
+          "retrieved_at": "2026-08-05T12:06:00Z",
+          "availability_basis": "source_release",
+          "payload_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "eligibility": {
+          "no_lookahead": false,
+          "reason_codes": [
+            "available_after_as_of"
+          ]
+        },
+        "trust": "untrusted",
+        "lifecycle": {
+          "mode": "ephemeral",
+          "persist_evidence": false,
+          "log_values": false
+        }
+      }
+    }
+  ],
+  "invalid_cases": [
+    {
+      "name": "future_vintage_cannot_claim_eligibility",
+      "base": "later_vintage_is_explicitly_ineligible_for_earlier_as_of",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": [
+            "eligibility",
+            "no_lookahead"
+          ],
+          "value": true
+        },
+        {
+          "operation": "replace",
+          "path": [
+            "eligibility",
+            "reason_codes"
+          ],
+          "value": []
+        }
+      ],
+      "schema_valid": true,
+      "expected_error": "invalid_eligibility"
+    },
+    {
+      "name": "availability_cannot_precede_release",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "observation",
+          "available_at"
+        ],
+        "value": "2026-08-03T11:59:59Z"
+      },
+      "schema_valid": true,
+      "expected_error": "invalid_temporal_order"
+    },
+    {
+      "name": "freshness_status_must_match_threshold",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "freshness",
+          "status"
+        ],
+        "value": "stale"
+      },
+      "schema_valid": true,
+      "expected_error": "invalid_freshness"
+    },
+    {
+      "name": "source_release_requires_known_release",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "observation",
+          "released_at"
+        ],
+        "value": null
+      },
+      "schema_valid": true,
+      "expected_error": "invalid_provenance"
+    },
+    {
+      "name": "feature_ids_are_unique",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "observation",
+          "features"
+        ],
+        "value": [
+          {
+            "feature_id": "year_over_year_change",
+            "value": 2.7,
+            "unit": "percent"
+          },
+          {
+            "feature_id": "year_over_year_change",
+            "value": 2.8,
+            "unit": "percent"
+          }
+        ]
+      },
+      "schema_valid": true,
+      "expected_error": "invalid_features"
+    },
+    {
+      "name": "structured_values_are_not_trusted_instructions",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "trust"
+        ],
+        "value": "trusted"
+      },
+      "schema_valid": false,
+      "expected_error": "invalid_trust"
+    },
+    {
+      "name": "ephemeral_view_cannot_be_persisted",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "lifecycle",
+          "persist_evidence"
+        ],
+        "value": true
+      },
+      "schema_valid": false,
+      "expected_error": "invalid_lifecycle"
+    },
+    {
+      "name": "selected_record_cannot_be_empty",
+      "base": "historical_revision_can_be_stale_and_eligible",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": [
+            "observation",
+            "value"
+          ],
+          "value": null
+        },
+        {
+          "operation": "replace",
+          "path": [
+            "observation",
+            "features"
+          ],
+          "value": []
+        }
+      ],
+      "schema_valid": false,
+      "expected_error": "empty_observation"
+    },
+    {
+      "name": "raw_source_payload_is_not_part_of_envelope",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "add",
+        "path": [
+          "raw_payload"
+        ],
+        "value": "product-owned"
+      },
+      "schema_valid": false,
+      "expected_error": "unknown_field"
+    },
+    {
+      "name": "vintage_identity_is_required",
+      "base": "released_series_with_derived_feature_is_eligible",
+      "mutation": {
+        "operation": "replace",
+        "path": [
+          "observation",
+          "vintage",
+          "vintage_id"
+        ],
+        "value": " "
+      },
+      "schema_valid": false,
+      "expected_error": "invalid_identifier"
+    }
+  ]
+}

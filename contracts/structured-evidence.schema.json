@@ -1,0 +1,455 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zachlp2016/rag-platform/contracts/structured-evidence.schema.json",
+  "title": "RAG Point-in-Time Structured Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schema_version",
+    "product_id",
+    "request_id",
+    "lane_id",
+    "evidence_id",
+    "as_of",
+    "source",
+    "observation",
+    "freshness",
+    "provenance",
+    "eligibility",
+    "trust",
+    "lifecycle"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "\\S"
+    },
+    "contract": {
+      "const": "rag.structured-evidence"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "product_id": {
+      "$ref": "#/$defs/logicalId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/opaqueId"
+    },
+    "lane_id": {
+      "$ref": "#/$defs/logicalId"
+    },
+    "evidence_id": {
+      "$ref": "#/$defs/opaqueId"
+    },
+    "as_of": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "observation": {
+      "$ref": "#/$defs/observation"
+    },
+    "freshness": {
+      "$ref": "#/$defs/freshness"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "eligibility": {
+      "$ref": "#/$defs/eligibility"
+    },
+    "trust": {
+      "const": "untrusted"
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/lifecycle"
+    }
+  },
+  "$defs": {
+    "logicalId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._:-]*$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "shortOpaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nullableTimestamp": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullableOpaqueId": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/opaqueId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "scalar": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "\\S"
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_id",
+        "series_id",
+        "uri"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "source_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "series_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "uri": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096,
+              "pattern": "\\S"
+            }
+          ]
+        }
+      }
+    },
+    "vintage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vintage_id",
+        "revision_id"
+      ],
+      "properties": {
+        "vintage_id": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "revision_id": {
+          "$ref": "#/$defs/nullableOpaqueId"
+        }
+      }
+    },
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_id",
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "feature_id": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "value": {
+          "$ref": "#/$defs/scalar"
+        },
+        "unit": {
+          "$ref": "#/$defs/shortOpaqueId"
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at",
+        "released_at",
+        "available_at",
+        "vintage",
+        "unit",
+        "frequency",
+        "value",
+        "features"
+      ],
+      "properties": {
+        "observed_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "released_at": {
+          "$ref": "#/$defs/nullableTimestamp"
+        },
+        "available_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "vintage": {
+          "$ref": "#/$defs/vintage"
+        },
+        "unit": {
+          "$ref": "#/$defs/shortOpaqueId"
+        },
+        "frequency": {
+          "$ref": "#/$defs/logicalId"
+        },
+        "value": {
+          "$ref": "#/$defs/scalar"
+        },
+        "features": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/feature"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "value": {
+              "not": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "features": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "basis",
+        "max_age_seconds"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "fresh",
+            "stale",
+            "unknown"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "observed_at",
+            "available_at"
+          ]
+        },
+        "max_age_seconds": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unknown"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "max_age_seconds": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "fresh",
+                  "stale"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "max_age_seconds": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retrieved_at",
+        "availability_basis",
+        "payload_hash"
+      ],
+      "properties": {
+        "retrieved_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "availability_basis": {
+          "enum": [
+            "source_release",
+            "source_vintage",
+            "first_seen",
+            "ingestion"
+          ]
+        },
+        "payload_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "no_lookahead",
+        "reason_codes"
+      ],
+      "properties": {
+        "no_lookahead": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/logicalId"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "no_lookahead": {
+                "const": true
+              }
+            },
+            "required": [
+              "no_lookahead"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reason_codes": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "no_lookahead": {
+                "const": false
+              }
+            },
+            "required": [
+              "no_lookahead"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reason_codes": {
+                "const": [
+                  "available_after_as_of"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "persist_evidence",
+        "log_values"
+      ],
+      "properties": {
+        "mode": {
+          "const": "ephemeral"
+        },
+        "persist_evidence": {
+          "const": false
+        },
+        "log_values": {
+          "const": false
+        }
+      }
+    }
+  }
+}

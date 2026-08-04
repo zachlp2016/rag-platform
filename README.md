@@ -58,6 +58,12 @@ defines provider-neutral token accounting, evidence provenance, degradation repo
 and the untrusted-evidence boundary. Its staged product adoption plan is recorded in
 [`Context Packet Rollout`](docs/retrieval/CONTEXT_PACKET_ROLLOUT.md).
 
+The versioned [`Point-in-Time Structured Evidence Contract`](contracts/structured-evidence.md)
+defines source/series identity, vintage-aware availability, no-lookahead eligibility,
+freshness, and the boundary between product-owned structured rows and ephemeral
+Context Packet summaries. [`ADR 0005`](architecture/decisions/0005-point-in-time-structured-evidence.md)
+records the decision; macro statistics are the first pilot, not a schema dependency.
+
 Validate the umbrella route table and contract fixtures with:
 
 ```bash
