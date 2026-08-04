@@ -39,3 +39,12 @@ does not delete or migrate runtime evidence.
 - Forge: `3a8df47` (`feat: quarantine low-trust ecosystem intake`), following
   `0a07a58` (`refactor: assign developer intel to Forge`)
 - Parallax: `1d29894` (`refactor: narrow Parallax intel sources`)
+
+## Verification findings
+
+Parallax revision `08a2673` records a post-split, non-destructive source
+rehearsal. Only RSS returned data: NewsAPI and Twitter/X were unconfigured, and
+the current Google Trends adapter returned HTTP 404. Of 30 RSS observations,
+16 were new revisions relative to the local-day archive. The local 2B quality
+worker made 16 single-item calls but produced unsafe geopolitical/policy
+rejections, so its results were retained as test evidence and not promoted.
