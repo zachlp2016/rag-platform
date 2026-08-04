@@ -40,6 +40,7 @@ does not delete or migrate runtime evidence.
   `0a07a58` (`refactor: assign developer intel to Forge`)
 - Parallax: `e1d8201` (`test: measure real entry evidence compression`),
   followed by `262aea7` (`Make retained intel fail open and rank by recency`),
+  then `7bdc464` (`Add full real intel provisioning master harness v2`),
   following `1d29894` (`refactor: narrow Parallax intel sources`)
 
 ## Verification findings
@@ -150,3 +151,31 @@ packet manifests expose the configured weight, half-life, and per-item bonus.
 This is currently a Parallax adoption, not yet a shared implementation library.
 Other products may adopt the contract in separate commits after testing their
 own source classes with captured real data.
+
+## Full-corpus Parallax provisioning rehearsal
+
+Parallax revision `7bdc464` repeated the fail-open/recency contract over the
+complete frozen 2026-08-04 raw archive and then applied the validated plan to
+the live Parallax library with a recoverable backup.
+
+The 1,287 real observations contained 253 Parallax-owned RSS occurrences and
+1,034 occurrences from sources assigned to Forge. The RSS set reduced to 87
+content revisions and 86 latest logical items. The finance classifier labeled
+82 of those 86 items negative, confirming at full-corpus scale that it cannot
+serve as the general-library admission authority.
+
+The application run added 72 missing RSS items, preserved three revisions newer
+than the frozen archive, and archived five items beyond the normal 90-day RSS
+window. The resulting live library had 1,069 eligible RSS chunks; all 1,215
+intel chunks had an effective date, while 146 historical Forge-source chunks
+remained excluded. A no-write replay made zero updates.
+
+Three real semantic retrieval probes returned their direct recent evidence
+first—Hormuz/Aramco supply, yen intervention, and HSBC profits/buybacks—while
+retaining older relevant evidence below it. No 2B or 27B call was needed for
+planning, provisioning, or validation.
+
+This validates source ownership, latest-revision selection, effective dating,
+idempotent provisioning, and bounded recency. It does not validate automatic
+fluff rejection: source-owned fail-open evidence may still be low-value, and a
+future quality worker requires a separate time-separated real-data gate.
