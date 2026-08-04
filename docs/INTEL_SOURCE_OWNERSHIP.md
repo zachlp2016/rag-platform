@@ -41,6 +41,7 @@ does not delete or migrate runtime evidence.
 - Parallax: `e1d8201` (`test: measure real entry evidence compression`),
   followed by `262aea7` (`Make retained intel fail open and rank by recency`),
   then `7bdc464` (`Add full real intel provisioning master harness v2`),
+  followed by `883e77d` (`Freeze full real corpus for provisioning harness v2`),
   following `1d29894` (`refactor: narrow Parallax intel sources`)
 
 ## Verification findings
